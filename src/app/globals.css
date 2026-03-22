@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-hover: var(--sidebar-hover);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ── Dark Mode Design Tokens ───────────────────────────────────── */
+:root {
+  --background: #0B0F1A;
+  --foreground: #E8ECF4;
+  --primary: #6C5CE7;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2D3250;
+  --secondary-foreground: #C8CDE0;
+  --accent: #00D2FF;
+  --accent-foreground: #0B0F1A;
+  --muted: #1A1F35;
+  --muted-foreground: #7B83A1;
+  --card: #111827;
+  --card-foreground: #E8ECF4;
+  --border: #2A3050;
+  --ring: #6C5CE7;
+  --success: #00E676;
+  --warning: #FFB74D;
+  --danger: #FF5252;
+  --sidebar: #0D1225;
+  --sidebar-foreground: #C8CDE0;
+  --sidebar-hover: #1A2040;
+}
+
+/* ── Global Resets ─────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans, "Inter", system-ui, -apple-system, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar Styling ─────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* ── Utility Animations ────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(108, 92, 231, 0.3); }
+  50%      { box-shadow: 0 0 20px rgba(108, 92, 231, 0.6); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Glass Effect ──────────────────────────────────────────────── */
+.glass {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(42, 48, 80, 0.5);
+}
+
+.glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(17, 24, 39, 0.8) 0%,
+    rgba(13, 18, 37, 0.9) 100%
+  );
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(42, 48, 80, 0.4);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+  box-shadow: 0 8px 32px rgba(108, 92, 231, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ── Gradient Text ─────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #6C5CE7, #00D2FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Skeleton Loading ──────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    #252B45 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}

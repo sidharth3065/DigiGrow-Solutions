@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npm run:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(findstr 2724)",
+      "Bash(kill:*)",
+      "Bash(cmd /c \"taskkill /F /PID 2724\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr 3000)",
+      "Bash(cmd /c \"taskkill /F /PID 2724 /T\")",
+      "Bash(tasklist)",
+      "Bash(findstr node:*)",
+      "Bash(cmd /c \"taskkill /F /PID 17416\")",
+      "Bash(cmd /c \"taskkill /F /PID 19952\")",
+      "Bash(powershell -Command \"Get-Process node | Stop-Process -Force\")",
+      "Bash(taskrunner:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm test:*)",
+      "Bash(npx eslint:*)"
+    ]
+  }
+}

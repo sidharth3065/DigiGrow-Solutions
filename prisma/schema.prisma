@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  TEAM
+  CLIENT
+}
+
+enum ServiceType {
+  SEO
+  SOCIAL_MEDIA
+  PPC_ADS
+  EMAIL_MARKETING
+  WEB_DESIGN
+  BRANDING
+  VIDEO_MARKETING
+  WHATSAPP_SMS
+  LEAD_GENERATION
+}
+
+enum ProjectStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum LeadStage {
+  NEW
+  CONTACTED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  role          UserRole  @default(CLIENT)
+  avatar        String?
+  phone         String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  client        Client?
+  teamMember    TeamMember?
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+model Client {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName String
+  industry     String?
+  website      String?
+  address      String?
+  city         String?
+  state        String?
+  country      String    @default("India")
+  notes        String?
+  leadStage    LeadStage @default(NEW)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  projects     Project[]
+  invoices     Invoice[]
+
+  @@map("clients")
+}
+
+model TeamMember {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department String?
+  title      String?
+  hourlyRate Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  tasks      Task[]
+  timeLogs   TimeLog[]
+
+  @@map("team_members")
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name        String
+  serviceType ServiceType
+  status      ProjectStatus @default(NOT_STARTED)
+  startDate   DateTime?
+  endDate     DateTime?
+  budget      Float?
+  currency    String        @default("INR")
+  description String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  tasks       Task[]
+  invoices    Invoice[]
+
+  @@map("projects")
+}
+
+model Task {
+  id           String       @id @default(cuid())
+  projectId    String
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assigneeId   String?
+  assignee     TeamMember?  @relation(fields: [assigneeId], references: [id])
+  title        String
+  description  String?
+  status       TaskStatus   @default(TODO)
+  priority     TaskPriority @default(MEDIUM)
+  dueDate      DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  timeLogs     TimeLog[]
+
+  @@map("tasks")
+}
+
+model TimeLog {
+  id           String     @id @default(cuid())
+  taskId       String
+  task         Task       @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  teamMemberId String
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id])
+  startTime    DateTime
+  endTime      DateTime?
+  duration     Int?       // in minutes
+  notes        String?
+  createdAt    DateTime   @default(now())
+
+  @@map("time_logs")
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?      @relation(fields: [projectId], references: [id])
+  invoiceNo   String        @unique
+  amount      Float
+  tax         Float         @default(0)
+  total       Float
+  currency    String        @default("INR")
+  status      InvoiceStatus @default(DRAFT)
+  dueDate     DateTime
+  paidAt      DateTime?
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("invoices")
+}
