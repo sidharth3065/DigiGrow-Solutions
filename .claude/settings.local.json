@@ -23,7 +23,18 @@
       "Bash(npx tsc:*)",
       "Bash(npm test:*)",
       "Bash(npx eslint:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npx react-native:*)",
+      "Bash(npx expo:*)",
+      "Bash(npx eas:*)",
+      "Bash(npm list:*)",
+      "Bash(eas login:*)",
+      "Bash(export:*)",
+      "Bash(lsc:*)",
+      "Bash(echo:*)",
+      "Bash(yes)"
     ]
   }
 }
