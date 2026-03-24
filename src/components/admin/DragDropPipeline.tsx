@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Target, Clock, AlertCircle } from "lucide-react";
+import { Clock } from "lucide-react";
 
 export interface PipelineClient {
   id: string;
@@ -22,17 +22,12 @@ const STAGES = [
 
 export default function DragDropPipeline({ initialData }: { initialData: PipelineClient[] }) {
   const queryClient = useQueryClient();
-  const [data, setData] = useState<Record<string, PipelineClient[]>>({});
-  const [isBrowser, setIsBrowser] = useState(false);
-
-  useEffect(() => {
-    setIsBrowser(true);
-    const grouped = STAGES.reduce((acc, stage) => {
+  const [data, setData] = useState<Record<string, PipelineClient[]>>(() => {
+    return STAGES.reduce((acc, stage) => {
       acc[stage.id] = initialData.filter((c) => c.leadStage === stage.id);
       return acc;
     }, {} as Record<string, PipelineClient[]>);
-    setData(grouped);
-  }, [initialData]);
+  });
 
   const updateStageMutation = useMutation({
     mutationFn: async ({ clientId, stage }: { clientId: string; stage: string }) => {
@@ -79,8 +74,6 @@ export default function DragDropPipeline({ initialData }: { initialData: Pipelin
       updateStageMutation.mutate({ clientId: draggableId, stage: destination.droppableId });
     }
   };
-
-  if (!isBrowser) return <div className="animate-pulse skeleton h-[600px] w-full rounded-2xl" />;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

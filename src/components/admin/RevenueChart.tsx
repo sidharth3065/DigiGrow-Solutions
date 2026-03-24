@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const data = [
@@ -14,13 +13,7 @@ const data = [
 ];
 
 export default function RevenueChart() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  if (typeof window === "undefined") {
     return <div className="animate-pulse skeleton h-[300px] w-full rounded-xl" />;
   }
 
@@ -59,7 +52,7 @@ export default function RevenueChart() {
               color: "var(--foreground)" 
             }} 
             itemStyle={{ color: "var(--foreground)" }}
-            formatter={(value: any) => [`$${value}`, undefined]}
+            formatter={(value) => [`$${value ?? ""}`, undefined]}
           />
           <Area 
             type="monotone" 

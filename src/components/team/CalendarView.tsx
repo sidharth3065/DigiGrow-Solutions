@@ -24,9 +24,23 @@ export default function CalendarView() {
           <CalendarIcon className="text-primary w-5 h-5" />
           Content & Deadlines
         </h2>
-        <span className="text-muted-foreground font-medium">
-          {format(startDate, "MMMM yyyy")}
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentDate((prev) => addDays(prev, -7))}
+            className="px-3 py-1 rounded-md border border-border text-sm"
+          >
+            Prev week
+          </button>
+          <span className="text-muted-foreground font-medium">
+            {format(startDate, "MMMM yyyy")}
+          </span>
+          <button
+            onClick={() => setCurrentDate((prev) => addDays(prev, 7))}
+            className="px-3 py-1 rounded-md border border-border text-sm"
+          >
+            Next week
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-7 border-b border-border bg-muted/30">

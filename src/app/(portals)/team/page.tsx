@@ -6,10 +6,31 @@ import TimeTracker from "@/components/team/TimeTracker";
 import { Clock, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
+type TaskStatus = "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE";
+
+interface ProjectSummary {
+  client: {
+    businessName: string;
+  };
+  serviceType: string;
+}
+
+interface TaskItem {
+  id: string;
+  title: string;
+  status: TaskStatus;
+  dueDate: string;
+  project: ProjectSummary;
+}
+
+interface TasksApiResponse {
+  tasks?: TaskItem[];
+}
+
 export default function TeamDashboardPage() {
   const { accessToken, user } = useAuthStore();
 
-  const { data: tasksData, isLoading: tasksLoading } = useQuery({
+  const { data: tasksData, isLoading: tasksLoading } = useQuery<TasksApiResponse>({
     queryKey: ["team", "tasks", "dashboard"],
     queryFn: async () => {
       const res = await fetch("/api/team/tasks", {
@@ -20,8 +41,8 @@ export default function TeamDashboardPage() {
     },
   });
 
-  const activeTasks = tasksData?.tasks?.filter((t: any) => t.status !== "DONE") || [];
-  const completedCount = tasksData?.tasks?.filter((t: any) => t.status === "DONE").length || 0;
+  const activeTasks: TaskItem[] = (tasksData?.tasks ?? []).filter((t) => t.status !== "DONE");
+  const completedCount = (tasksData?.tasks ?? []).filter((t) => t.status === "DONE").length;
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -31,7 +52,7 @@ export default function TeamDashboardPage() {
             Welcome back, {user?.name?.split( " " )[0] || "Team"}!
           </h1>
           <p className="text-muted-foreground mt-1">
-            Here's what you need to focus on today.
+            Here&apos;s what you need to focus on today.
           </p>
         </div>
       </div>
@@ -61,7 +82,7 @@ export default function TeamDashboardPage() {
               <p className="text-muted-foreground text-sm">No pending tasks! Enjoy your day.</p>
             ) : (
               <div className="space-y-3">
-                {activeTasks.slice(0, 4).map((task: any) => (
+                {activeTasks.slice(0, 4).map((task) => (
                   <div key={task.id} className="p-4 rounded-xl border border-border bg-muted/10 flex items-center justify-between">
                     <div>
                       <p className="font-semibold text-sm">{task.title}</p>

@@ -5,10 +5,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  Settings,
   FileText,
   Users,
-  BarChart3,
   MessageSquare,
   FolderOpen,
   Calendar,
@@ -21,7 +19,6 @@ import {
   Video,
   Smartphone,
   Zap,
-  TrendingUp,
   UserCheck,
   Receipt,
   BrainCircuit,
