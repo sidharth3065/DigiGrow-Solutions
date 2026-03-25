@@ -3,8 +3,18 @@ import { View, Text, StyleSheet, ActivityIndicator, FlatList, RefreshControl, To
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../lib/api';
 
+interface InvoiceItem {
+  id: string;
+  total: number;
+  status: 'DRAFT' | 'SENT' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+  dueDate: string;
+  project?: {
+    serviceType: string;
+  } | null;
+}
+
 export default function InvoicesScreen() {
-  const [invoices, setInvoices] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<InvoiceItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -21,7 +31,7 @@ export default function InvoicesScreen() {
   };
 
   useEffect(() => {
-    fetchInvoices();
+    void fetchInvoices();
   }, []);
 
   const onRefresh = () => {
@@ -32,7 +42,7 @@ export default function InvoicesScreen() {
   const payInvoice = async (id: string) => {
     try {
       await api.post(`/client/invoices/${id}/pay`);
-      fetchInvoices();
+      await fetchInvoices();
     } catch (e) {
       console.log('Failed to pay invoice', e);
     }
@@ -47,7 +57,7 @@ export default function InvoicesScreen() {
   }
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount / 100);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
   return (

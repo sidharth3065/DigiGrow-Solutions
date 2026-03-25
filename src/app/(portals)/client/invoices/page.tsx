@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/authStore";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
-import { CreditCard, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 type InvoiceResponse = {
@@ -16,7 +16,7 @@ type InvoiceResponse = {
   currency: string;
   status: string;
   dueDate: string;
-  project?: { serviceType: string };
+  project?: { serviceType: string } | null;
 };
 
 const columns: ColumnDef<InvoiceResponse>[] = [
@@ -61,7 +61,7 @@ const columns: ColumnDef<InvoiceResponse>[] = [
       let label = status;
 
       if (status === "PAID") styles = "bg-green-500/10 text-green-400 border-green-500/20";
-      if (status === "DUE" || status === "SENT") {
+      if (status === "OVERDUE" || status === "SENT") {
         styles = "bg-red-500/10 text-red-400 border-red-500/20";
         label = "PAY NOW";
       }
@@ -76,7 +76,7 @@ const columns: ColumnDef<InvoiceResponse>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
+    cell: () => (
       <button className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground">
         <Download size={16} />
       </button>

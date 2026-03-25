@@ -18,6 +18,10 @@ export default function TeamTasksPage() {
     },
   });
 
+  const taskBoardKey = (data?.tasks || [])
+    .map((task: { id: string; status: string; updatedAt?: string }) => `${task.id}:${task.status}:${task.updatedAt ?? ""}`)
+    .join("|");
+
   return (
     <div className="p-8 max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -33,7 +37,7 @@ export default function TeamTasksPage() {
         {isLoading ? (
           <div className="h-[600px] w-full animate-pulse skeleton rounded-xl" />
         ) : (
-          <TaskBoard initialData={data?.tasks || []} />
+          <TaskBoard key={taskBoardKey} initialData={data?.tasks || []} />
         )}
       </div>
     </div>

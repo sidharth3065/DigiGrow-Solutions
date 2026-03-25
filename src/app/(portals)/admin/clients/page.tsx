@@ -100,7 +100,7 @@ export default function ClientsPage() {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Client Directory</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your agency's client portfolio and active subscriptions.
+            Manage your agency&apos;s client portfolio and active subscriptions.
           </p>
         </div>
         <button className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl transition-all shadow-lg hover:shadow-primary/25">

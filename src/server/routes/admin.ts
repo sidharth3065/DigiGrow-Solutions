@@ -18,7 +18,7 @@ adminRouter.use("*", async (c, next) => {
       return c.json({ error: "Forbidden: Admins only" }, 403);
     }
     await next();
-  } catch (error) {
+  } catch {
     return c.json({ error: "Invalid token" }, 401);
   }
 });

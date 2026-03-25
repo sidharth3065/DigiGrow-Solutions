@@ -8,6 +8,12 @@ interface TimeTrackerProps {
   tasks: Array<{ id: string; title: string }>;
 }
 
+type LogTimeInput = {
+  taskId: string;
+  amountHours: number;
+  description: string;
+};
+
 export default function TimeTracker({ tasks }: TimeTrackerProps) {
   const queryClient = useQueryClient();
   const [activeTaskId, setActiveTaskId] = useState<string>("");
@@ -26,7 +32,7 @@ export default function TimeTracker({ tasks }: TimeTrackerProps) {
   }, [isTracking]);
 
   const logTimeMutation = useMutation({
-    mutationFn: async ({ taskId, amountHours, description }: any) => {
+    mutationFn: async ({ taskId, amountHours, description }: LogTimeInput) => {
       const authData = localStorage.getItem("digigrow-auth");
       const token = authData ? JSON.parse(authData).state.accessToken : "";
       

@@ -14,7 +14,7 @@ type InvoiceResponse = {
   status: string;
   dueDate: string;
   client: { businessName: string };
-  project: { serviceType: string };
+  project?: { serviceType: string } | null;
 };
 
 const columns: ColumnDef<InvoiceResponse>[] = [
@@ -36,7 +36,9 @@ const columns: ColumnDef<InvoiceResponse>[] = [
     accessorKey: "project.serviceType",
     header: "Service",
     cell: ({ row }) => (
-      <span className="text-sm text-foreground">{row.original.project.serviceType.replace("_", " ")}</span>
+      <span className="text-sm text-foreground">
+        {row.original.project?.serviceType.replace("_", " ") || "General Retainer"}
+      </span>
     ),
   },
   {
@@ -56,7 +58,9 @@ const columns: ColumnDef<InvoiceResponse>[] = [
       let styles = "bg-muted text-muted-foreground border-border";
       
       if (status === "PAID") styles = "bg-green-500/10 text-green-400 border-green-500/20";
-      if (status === "DUE") styles = "bg-red-500/10 text-red-400 border-red-500/20";
+      if (status === "SENT" || status === "OVERDUE") {
+        styles = "bg-red-500/10 text-red-400 border-red-500/20";
+      }
       if (status === "DRAFT") styles = "bg-orange-500/10 text-orange-400 border-orange-500/20";
 
       return (
@@ -77,7 +81,7 @@ const columns: ColumnDef<InvoiceResponse>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
+    cell: () => (
       <button className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground">
         <Download size={16} />
       </button>

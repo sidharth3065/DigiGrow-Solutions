@@ -6,6 +6,15 @@ import { Users, TrendingUp, CreditCard, Activity } from "lucide-react";
 import DragDropPipeline from "@/components/admin/DragDropPipeline";
 import RevenueChart from "@/components/admin/RevenueChart";
 import { useAuthStore } from "@/stores/authStore";
+import type { ReactNode } from "react";
+
+type StatCardProps = {
+  icon: ReactNode;
+  title: string;
+  value: string | number;
+  trend: string;
+  trendUp: boolean;
+};
 
 export default function AdminDashboardPage() {
   const { accessToken } = useAuthStore();
@@ -133,7 +142,7 @@ export default function AdminDashboardPage() {
   );
 }
 
-function StatCard({ icon, title, value, trend, trendUp }: any) {
+function StatCard({ icon, title, value, trend, trendUp }: StatCardProps) {
   return (
     <div className="glass-card p-6 group hover:border-primary/50 transition-colors">
       <div className="flex items-start justify-between mb-4">

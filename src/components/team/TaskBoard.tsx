@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Clock, CheckSquare } from "lucide-react";
@@ -12,6 +12,7 @@ export interface Task {
   status: string;
   priority: string;
   dueDate: string;
+  updatedAt?: string;
   project: { serviceType: string; client: { businessName: string } };
 }
 
@@ -22,19 +23,16 @@ const STAGES = [
   { id: "DONE", title: "Done", color: "#00E676" },
 ];
 
+function groupTasksByStage(tasks: Task[]) {
+  return STAGES.reduce((acc, stage) => {
+    acc[stage.id] = tasks.filter((task) => task.status === stage.id);
+    return acc;
+  }, {} as Record<string, Task[]>);
+}
+
 export default function TaskBoard({ initialData }: { initialData: Task[] }) {
   const queryClient = useQueryClient();
-  const [data, setData] = useState<Record<string, Task[]>>({});
-  const [isBrowser, setIsBrowser] = useState(false);
-
-  useEffect(() => {
-    setIsBrowser(true);
-    const grouped = STAGES.reduce((acc, stage) => {
-      acc[stage.id] = initialData.filter((t) => t.status === stage.id);
-      return acc;
-    }, {} as Record<string, Task[]>);
-    setData(grouped);
-  }, [initialData]);
+  const [data, setData] = useState<Record<string, Task[]>>(() => groupTasksByStage(initialData));
 
   const updateStageMutation = useMutation({
     mutationFn: async ({ taskId, status }: { taskId: string; status: string }) => {
@@ -81,7 +79,9 @@ export default function TaskBoard({ initialData }: { initialData: Task[] }) {
     }
   };
 
-  if (!isBrowser) return <div className="animate-pulse skeleton h-[600px] w-full rounded-2xl" />;
+  if (typeof window === "undefined") {
+    return <div className="animate-pulse skeleton h-[600px] w-full rounded-2xl" />;
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

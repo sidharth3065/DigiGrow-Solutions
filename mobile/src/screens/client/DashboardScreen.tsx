@@ -4,9 +4,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../lib/api';
 import { useAuthStore } from '../../store/authStore';
 
+interface ClientMetricSummary {
+  businessName?: string | null;
+}
+
+interface ActiveService {
+  id: string;
+  serviceType: string;
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+}
+
 interface DashboardData {
-  mrr: number;
-  activeServices: any[];
+  totalUnpaidBalance: number;
+  activeServices: ActiveService[];
+  clientMetrics?: ClientMetricSummary;
 }
 
 export default function DashboardScreen() {
@@ -28,7 +39,7 @@ export default function DashboardScreen() {
   };
 
   useEffect(() => {
-    fetchDashboard();
+    void fetchDashboard();
   }, []);
 
   const onRefresh = () => {
@@ -45,7 +56,7 @@ export default function DashboardScreen() {
   }
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount / 100);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
   return (
@@ -57,29 +68,34 @@ export default function DashboardScreen() {
         ListHeaderComponent={() => (
           <View style={styles.header}>
             <Text style={styles.greeting}>Welcome back,</Text>
-            <Text style={styles.name}>{user?.name}</Text>
+            <Text style={styles.name}>{data?.clientMetrics?.businessName || user?.name}</Text>
             
             <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Total Spend (MRR)</Text>
-              <Text style={styles.statValue}>{formatCurrency(data?.mrr || 0)}</Text>
+              <Text style={styles.statLabel}>Outstanding Balance</Text>
+              <Text style={styles.statValue}>{formatCurrency(data?.totalUnpaidBalance || 0)}</Text>
             </View>
             
             <Text style={styles.sectionTitle}>Active Services</Text>
           </View>
         )}
-        renderItem={({ item }) => (
+        renderItem={({ item }) => {
+          const isLive = item.status === 'IN_PROGRESS';
+          const statusLabel = item.status.replace(/_/g, ' ');
+
+          return (
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <Text style={styles.serviceName}>{item.serviceType.replace(/_/g, ' ')}</Text>
-              <View style={[styles.badge, item.status === 'ACTIVE' ? styles.badgeActive : styles.badgeInactive]}>
-                <Text style={[styles.badgeText, item.status === 'ACTIVE' ? styles.badgeTextActive : styles.badgeTextInactive]}>
-                  {item.status}
+              <View style={[styles.badge, isLive ? styles.badgeActive : styles.badgeInactive]}>
+                <Text style={[styles.badgeText, isLive ? styles.badgeTextActive : styles.badgeTextInactive]}>
+                  {statusLabel}
                 </Text>
               </View>
             </View>
             <Text style={styles.serviceDesc}>Service is running smoothly. Tap for details via Web.</Text>
           </View>
-        )}
+          );
+        }}
         ListEmptyComponent={() => (
           <Text style={styles.emptyText}>No active services found.</Text>
         )}

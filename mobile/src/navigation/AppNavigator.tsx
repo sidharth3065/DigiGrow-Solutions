@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuthStore } from '../store/authStore';
-import { LayoutDashboard, Receipt, MessageSquare } from 'lucide-react-native';
+import { LayoutDashboard, Receipt } from 'lucide-react-native';
 
 // Screens
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -56,7 +56,7 @@ function ClientTabs() {
 }
 
 export default function AppNavigator() {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

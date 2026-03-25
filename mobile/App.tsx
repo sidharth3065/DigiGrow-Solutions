@@ -14,8 +14,8 @@ export default function App() {
       await checkAuth();
       setIsReady(true);
     };
-    init();
-  }, []);
+    void init();
+  }, [checkAuth]);
 
   if (!isReady) return null; // Can render a splash screen here
 

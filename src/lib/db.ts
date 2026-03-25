@@ -10,7 +10,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 // Create a pg connection pool
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool as any);
+const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0]);
 
 export const prisma =
   globalForPrisma.prisma ??

@@ -23,7 +23,7 @@ aiRouter.use("*", async (c, next) => {
     
     c.set("userId", payload.userId);
     await next();
-  } catch (error) {
+  } catch {
     return c.json({ error: "Invalid token" }, 401);
   }
 });

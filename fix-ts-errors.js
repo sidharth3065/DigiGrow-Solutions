@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Placeholder bulk fix script
 const fs = require('fs');
 const path = require('path');

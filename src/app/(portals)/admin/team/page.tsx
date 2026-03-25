@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { DataTable } from "@/components/ui/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Plus, UserCircle } from "lucide-react";
+import Image from "next/image";
 
 type TeamResponse = {
   id: string;
@@ -19,9 +20,17 @@ const columns: ColumnDef<TeamResponse>[] = [
     accessorKey: "user",
     header: "Team Member",
     cell: ({ row }) => (
-      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
         {row.original.user.avatar ? (
-          <img src={row.original.user.avatar} alt="" className="w-8 h-8 rounded-full bg-muted object-cover" />
+          <Image
+            src={row.original.user.avatar}
+            alt=""
+            width={32}
+            height={32}
+            loader={({ src }) => src}
+            unoptimized
+            className="w-8 h-8 rounded-full bg-muted object-cover"
+          />
         ) : (
           <UserCircle className="w-8 h-8 text-muted-foreground" />
         )}

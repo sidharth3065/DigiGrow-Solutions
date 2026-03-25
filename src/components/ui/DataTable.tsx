@@ -18,6 +18,8 @@ export function DataTable<TData, TValue>({
   data,
   loading = false,
 }: DataTableProps<TData, TValue>) {
+  // TanStack Table is not React Compiler-compatible yet, so we intentionally opt out here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

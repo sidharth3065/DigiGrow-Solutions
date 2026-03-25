@@ -25,7 +25,7 @@ teamRouter.use("*", async (c, next) => {
     // Pass user ID into context for filtering
     c.set("userId", payload.userId);
     await next();
-  } catch (error) {
+  } catch {
     return c.json({ error: "Invalid token" }, 401);
   }
 });

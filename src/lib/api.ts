@@ -148,7 +148,14 @@ app.post("/auth/login", async (c) => {
       },
     });
 
-    const { passwordHash: _, ...safeUser } = user;
+    const safeUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar,
+      isActive: user.isActive,
+    };
     return c.json({ user: safeUser, accessToken, refreshToken });
   } catch (error) {
     console.error("Login error:", error);
