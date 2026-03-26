@@ -1,15 +1,26 @@
 import axios from "axios";
+import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
-// Use 10.0.2.2 for Android Emulator connecting to host machine's localhost
-// Modify this to your PC's local IP (e.g., 192.168.1.X) if testing on a physical device over WiFi
+function getDevApiBaseUrl() {
+  const hostUri = Constants.expoConfig?.hostUri;
+  const host = hostUri?.replace(/^https?:\/\//, "").split(":")[0];
+
+  if (host) {
+    return `http://${host}:3000/api`;
+  }
+
+  return Platform.OS === "android"
+    ? "http://10.0.2.2:3000/api"
+    : "http://localhost:3000/api";
+}
+
 const getBaseUrl = () => {
   if (__DEV__) {
-    return Platform.OS === "android"
-      ? "http://10.0.2.2:3000/api"
-      : "http://localhost:3000/api";
+    return getDevApiBaseUrl();
   }
+
   // Production URL would go here
   return "https://digigrow.app/api";
 };

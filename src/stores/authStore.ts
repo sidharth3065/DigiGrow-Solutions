@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface User {
   id: string;
@@ -26,10 +26,12 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasHydrated: boolean;
 
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   setLoading: (loading: boolean) => void;
+  setHydrated: (hydrated: boolean) => void;
   logout: () => void;
 }
 
@@ -41,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
       isLoading: true,
+      hasHydrated: false,
 
       setAuth: (user, accessToken, refreshToken) =>
         set({
@@ -49,12 +52,15 @@ export const useAuthStore = create<AuthState>()(
           refreshToken,
           isAuthenticated: true,
           isLoading: false,
+          hasHydrated: true,
         }),
 
       setTokens: (accessToken, refreshToken) =>
         set({ accessToken, refreshToken }),
 
       setLoading: (isLoading) => set({ isLoading }),
+
+      setHydrated: (hasHydrated) => set({ hasHydrated }),
 
       logout: () =>
         set({
@@ -63,17 +69,22 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
           isAuthenticated: false,
           isLoading: false,
+          hasHydrated: true,
         }),
     }),
     {
       name: "digigrow-auth",
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setLoading(false);
+        state?.setHydrated(true);
+      },
     }
   )
 );
-
