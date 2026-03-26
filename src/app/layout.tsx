@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,20 +14,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DigiGrow Solutions — Digital Marketing Platform",
+  title: "DigiGrow Solutions | Digital Marketing Agency",
   description:
-    "All-in-one SaaS platform for digital marketing agencies serving small & local businesses. Manage SEO, social media, PPC, email, branding, and more.",
+    "Public-facing website and client portal for DigiGrow Solutions. Explore services, learn about the agency, and manage client work in one place.",
   keywords: [
     "digital marketing",
-    "SaaS",
+    "digital marketing agency",
     "SEO",
     "social media marketing",
     "PPC",
+    "website design",
+    "lead generation",
     "small business",
   ],
 };
-
-import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
