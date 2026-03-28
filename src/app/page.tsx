@@ -33,6 +33,14 @@ type Highlight = {
   description: string;
 };
 
+type PricingPlan = {
+  name: string;
+  price: string;
+  description: string;
+  audience: string;
+  features: string[];
+};
+
 const services: Service[] = [
   {
     title: "Search visibility",
@@ -152,6 +160,45 @@ const faqs = [
   },
 ];
 
+const pricingPlans: PricingPlan[] = [
+  {
+    name: "Starter Visibility",
+    price: "From $799/mo",
+    audience: "For local businesses that need a stronger first impression and a clearer online presence.",
+    description:
+      "A focused engagement for brands that need website polish, local search visibility, and consistent monthly reporting.",
+    features: [
+      "Website refresh and conversion cleanup",
+      "Google Business Profile and local SEO basics",
+      "Monthly reporting and action plan",
+    ],
+  },
+  {
+    name: "Lead Engine",
+    price: "From $1,500/mo",
+    audience: "For teams that want steady inquiries through landing pages, ads, and follow-up visibility.",
+    description:
+      "A growth package built around generating better leads and turning paid traffic into booked conversations.",
+    features: [
+      "Landing page and funnel support",
+      "Paid campaign setup and optimization",
+      "Lead tracking with shared client visibility",
+    ],
+  },
+  {
+    name: "Growth Operating System",
+    price: "From $2,500/mo",
+    audience: "For ambitious brands that need SEO, campaigns, content, reporting, and a stronger operating rhythm.",
+    description:
+      "A higher-touch partnership for businesses ready to compound growth across multiple channels instead of relying on one tactic.",
+    features: [
+      "SEO, content, paid media, and reporting",
+      "Monthly strategy and priority planning",
+      "Portal access for updates, invoices, and delivery visibility",
+    ],
+  },
+];
+
 export default function Home() {
   return (
     <main className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(0,210,255,0.22),transparent_28%),radial-gradient(circle_at_top_right,rgba(255,143,77,0.16),transparent_24%),linear-gradient(180deg,#04070f_0%,#0b1020_44%,#070b16_100%)] text-white">
@@ -176,6 +223,9 @@ export default function Home() {
             <a href="#services" className="transition hover:text-white">
               Services
             </a>
+            <Link href="/pricing" className="transition hover:text-white">
+              Pricing
+            </Link>
             <a href="#about" className="transition hover:text-white">
               About
             </a>
@@ -339,6 +389,61 @@ export default function Home() {
                 {service.title}
               </h3>
               <p className="mt-3 text-base leading-7 text-slate-300">{service.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-200">Pricing</p>
+            <h2 className={`${sora.className} mt-4 text-4xl font-semibold text-white sm:text-5xl`}>
+              Offers built the way businesses actually buy marketing.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-300">
+              Instead of vague custom retainers from day one, we position the work through clear
+              entry points. That makes the site easier to understand and the sales conversation much
+              easier to start.
+            </p>
+          </div>
+
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-2 self-start rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-cyan-300/35 hover:bg-white/5 sm:self-auto"
+          >
+            View pricing details
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          {pricingPlans.map((plan, index) => (
+            <article
+              key={plan.name}
+              className={`rounded-[30px] border p-7 transition duration-300 hover:-translate-y-1 ${
+                index === 1
+                  ? "border-cyan-300/35 bg-cyan-300/10 shadow-[0_18px_70px_rgba(0,210,255,0.08)]"
+                  : "border-white/10 bg-white/[0.04]"
+              }`}
+            >
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-200">
+                {plan.name}
+              </p>
+              <p className={`${sora.className} mt-4 text-4xl font-semibold text-white`}>
+                {plan.price}
+              </p>
+              <p className="mt-4 text-sm leading-7 text-slate-300">{plan.audience}</p>
+              <p className="mt-4 text-sm leading-7 text-slate-300">{plan.description}</p>
+
+              <div className="mt-6 space-y-3">
+                {plan.features.map((feature) => (
+                  <div key={feature} className="flex items-start gap-3">
+                    <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-200" />
+                    <p className="text-sm leading-7 text-slate-200">{feature}</p>
+                  </div>
+                ))}
+              </div>
             </article>
           ))}
         </div>
@@ -571,6 +676,9 @@ export default function Home() {
             <a href="#services" className="transition hover:text-white">
               Services
             </a>
+            <Link href="/pricing" className="transition hover:text-white">
+              Pricing
+            </Link>
             <a href="#about" className="transition hover:text-white">
               About
             </a>
